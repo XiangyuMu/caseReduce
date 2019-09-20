@@ -98,10 +98,35 @@ public class createNewCase {
 	}
 	
 
-	public static void main(String[] args) {
+	public static void main(String[] args) {     //所有测试用例放在一个文件中
 		System.out.println("请输入测试用例的文件序号");
 		Scanner scan = new Scanner(System.in);
 		int num = scan.nextInt();
+		
+		
+//		int num;
+//		for (int i = 36;i<=39;i++) {
+//			num = i;
+//			TestInput ti = new TestInput();
+//			ti.setPath("case");
+//			ElemwntList el = ti.createTestCase_Single(num, "String", "String");
+//			createNewCase cnc = new createNewCase();
+//			cnc.setElementList(el);
+//			cnc.createAllCases();
+//			for(int k = 0;k<cnc.getElementListList().size();k++) {
+//				System.out.println(cnc.getElementListList().get(k).toString());
+//			}
+//			System.out.println("个数为："+cnc.getElementListList().size());
+//			 createDir cd = new createDir();
+//			// cd.createFileDir(new File("case4.txt"));
+//			 try {
+//				cd.createAllCasesInOneFile(cnc.getElementListList(),"case"+num);
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
+		
 		TestInput ti = new TestInput();
 		ti.setPath("case");
 		ElemwntList el = ti.createTestCase_Single(num, "String", "String");

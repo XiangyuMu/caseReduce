@@ -8,7 +8,7 @@ import java.util.List;
 
 import com.jlu.redcueExample.Element;
 import com.jlu.redcueExample.ElemwntList;
-
+//create dir of test cases for one program
 public class createDir {
 	private String path;
 	private String filename;

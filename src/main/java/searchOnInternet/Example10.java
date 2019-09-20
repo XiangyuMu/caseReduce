@@ -6,9 +6,16 @@ import com.jlu.redcueExample.Element;
 import com.jlu.redcueExample.ElemwntList;
 //输入<String,String>(key,value)
 //将value作为String进行累加
-//不可交换
+//不可交换(确定)
 public class Example10 {
 
+	public List<TwoTuple> getOutput() {
+		return output;
+	}
+	public void setOutput(List<TwoTuple> output) {
+		this.output = output;
+	}
+	
 	List<TwoTuple> output = new ArrayList<TwoTuple>() ;
 	String v = "";
 	

@@ -9,9 +9,17 @@ import com.jlu.redcueExample.Element;
 import com.jlu.redcueExample.ElemwntList;
 //输入<String,int>(key,value)   value<=25
 //进行复杂计算
-//不知是否可交换
+//不知是否可交换（可交换）
 public class Example06 {
 
+	
+	public List<TwoTuple> getOutput() {
+		return output;
+	}
+	public void setOutput(List<TwoTuple> output) {
+		this.output = output;
+	}
+	
 	List<TwoTuple> output = new ArrayList<TwoTuple>() ;
 	String v = "";
 	public void reduce(ElemwntList list) {

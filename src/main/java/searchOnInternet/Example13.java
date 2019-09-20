@@ -6,7 +6,7 @@ import com.jlu.redcueExample.Element;
 import com.jlu.redcueExample.ElemwntList;
 //输入<int,int>(key,value)
 //输出为最小值
-//可交换
+//可交换（确定）
 public class Example13 {
 
 	List<TwoTuple> output = new ArrayList<TwoTuple>() ;

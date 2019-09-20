@@ -6,8 +6,16 @@ import com.jlu.redcueExample.Element;
 import com.jlu.redcueExample.ElemwntList;
 //输入<String,Double>(key,value) (value的第一位为1或2)
 //输出将第一个为1的进行累加，作为key，value为第一个字母为2的最后一个。
-//不可交换
+//不可交换(确定)
 public class Example19 {
+	
+	public List<TwoTuple> getOutput() {
+		return output;
+	}
+	public void setOutput(List<TwoTuple> output) {
+		this.output = output;
+	}
+	
 	List<TwoTuple> output = new ArrayList<TwoTuple>() ;
 	String v ="";
     public void reduce(ElemwntList list)  {

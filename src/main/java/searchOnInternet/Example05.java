@@ -7,9 +7,12 @@ import com.jlu.redcueExample.Element;
 import com.jlu.redcueExample.ElemwntList;
 //输入<String,String>(key,value)
 //将value的值连接
-//不可交换
+//不可交换（不可交换）
 public class Example05 {
 
+	
+	
+	
 	List<TwoTuple> output = new ArrayList<TwoTuple>() ;
 	
 	

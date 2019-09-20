@@ -10,8 +10,16 @@ import com.jlu.redcueExample.Element;
 import com.jlu.redcueExample.ElemwntList;
 //输入<String,String>(key,value)
 //计算key对应的ip的个数
-//可交换
+//可交换（确定）
 public class Example03 {
+	
+	public List<TwoTuple> getOutput() {
+		return output;
+	}
+	public void setOutput(List<TwoTuple> output) {
+		this.output = output;
+	}
+	
 	List<TwoTuple> output = new ArrayList<TwoTuple>() ;
 	public void reduce(ElemwntList list) {
         //使用set集合记性独立ip统计

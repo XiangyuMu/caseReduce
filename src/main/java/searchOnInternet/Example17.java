@@ -9,6 +9,14 @@ import com.jlu.redcueExample.ElemwntList;
 //输出set（value）的集合
 //可交换（set为无顺序）
 public class Example17 {
+	
+	public List<TwoTuple> getOutput() {
+		return output;
+	}
+	public void setOutput(List<TwoTuple> output) {
+		this.output = output;
+	}
+	
 	List<TwoTuple> output = new ArrayList<TwoTuple>() ;
 	String v ="";
     public void reduce(ElemwntList list)  {
@@ -16,7 +24,7 @@ public class Example17 {
     	String key = (String)list.getList().get(0).getList().get(0);
     	Set<String> attackers = new TreeSet<String>();
     	int i = 0;
-        while (list.getList().get(i)!=null) {
+        while (i<list.getList().size()) {
           String valStr = list.getList().get(i).getList().get(1).toString();
           i = i+1;
           attackers.add(valStr);

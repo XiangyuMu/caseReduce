@@ -6,9 +6,16 @@ import com.jlu.redcueExample.Element;
 import com.jlu.redcueExample.ElemwntList;
 //输入为<String,String>(key,value)     (value由String+“”+float组成)
 //生成一串键值对，且(key，value)中value为在总和中的占比
-//不可交换
+//不可交换（确定）
 
 public class Example08 {
+	
+	public List<TwoTuple> getOutput() {
+		return output;
+	}
+	public void setOutput(List<TwoTuple> output) {
+		this.output = output;
+	}
 
 	List<TwoTuple> output = new ArrayList<TwoTuple>() ;
 	String v = "";

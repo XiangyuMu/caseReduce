@@ -8,10 +8,18 @@ import com.jlu.redcueExample.Element;
 import com.jlu.redcueExample.ElemwntList;
 //输入<String,String>(key,value)     (value值中有的以“pr”开头，有的没有)
 //复杂的计算
-//不清楚是否可交换
+//不清楚是否可交换（可交换）
 
 public class Example07 {
 
+	
+	public List<TwoTuple> getOutput() {
+		return output;
+	}
+	public void setOutput(List<TwoTuple> output) {
+		this.output = output;
+	}
+	
 	List<TwoTuple> output = new ArrayList<TwoTuple>() ;
 	String v = "";
 	public void reduce(ElemwntList list) {
@@ -31,9 +39,9 @@ public class Example07 {
             String valueStr = value.getList().get(1).toString();
             String[] kv = valueStr.split(":");
             if (valueStr.startsWith("pr")) {
-                prMap.put(Integer.parseInt(kv[0]), Float.valueOf(kv[1]));
+                prMap.put(Integer.parseInt(kv[1]), Float.valueOf(kv[2]));
             } else {
-                matrixMap.put(Integer.parseInt(kv[0]), Float.valueOf(kv[1]));
+                matrixMap.put(Integer.parseInt(kv[1]), Float.valueOf(kv[2]));
             }
             printStr.append(",").append(valueStr);
         }

@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
+//create Test cases random
 public class createTestCasesRandom {
 	private int count = 0;
 	private String firstItem = "";

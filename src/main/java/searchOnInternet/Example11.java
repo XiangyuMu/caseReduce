@@ -10,9 +10,17 @@ import com.jlu.redcueExample.Element;
 import com.jlu.redcueExample.ElemwntList;
 //输入<String,String>(key,value)       (value的格式是“Strng,Double”)
 //输出为<key,value>对
-//不可交换（键值对顺序会变）
+//可交换（set无顺序）（确定）
 public class Example11 {
 
+	public List<TwoTuple> getOutput() {
+		return output;
+	}
+	public void setOutput(List<TwoTuple> output) {
+		this.output = output;
+	}
+	
+	
 	List<TwoTuple> output = new ArrayList<TwoTuple>() ;
 	String v = "";
 	
@@ -27,6 +35,7 @@ public class Example11 {
             if (result.containsKey(str[0])) {
                 result.put(str[0], result.get(str[0]) + Double.parseDouble(str[1]));
             } else {
+            	System.out.println(str[1]);
                 result.put(str[0], Double.parseDouble(str[1]));
             }
         }

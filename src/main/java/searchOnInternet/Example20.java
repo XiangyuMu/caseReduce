@@ -7,6 +7,14 @@ import com.jlu.redcueExample.ElemwntList;
 //输出value为空的键值对
 //不可交换
 public class Example20 {
+	
+	public List<TwoTuple> getOutput() {
+		return output;
+	}
+	public void setOutput(List<TwoTuple> output) {
+		this.output = output;
+	}
+	
 	List<TwoTuple> output = new ArrayList<TwoTuple>() ;
 	String v ="";
     public void reduce(ElemwntList list)  {
@@ -14,9 +22,11 @@ public class Example20 {
     	String key = (String)list.getList().get(0).getList().get(0);
 
     	int i = 0;
-    	while (list.getList().get(i)!=null) {
+    	while (i<list.getList().size()) {
             String inputDoc = (String) list.getList().get(i).getList().get(1);
+            System.out.println(inputDoc);
             boolean keep = inputDoc.isEmpty();
+            i++;
             if (!keep) {
                 String incrCounter="BehemothReducer";
                 continue;

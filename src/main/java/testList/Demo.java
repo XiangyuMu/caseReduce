@@ -7,8 +7,26 @@ import java.util.List;
 
 import com.jlu.redcueExample.ElemwntList;
 
+import searchOnInternet.Example01;
+import searchOnInternet.Example02;
+import searchOnInternet.Example03;
+import searchOnInternet.Example04;
 import searchOnInternet.Example05;
+import searchOnInternet.Example06;
+import searchOnInternet.Example07;
+import searchOnInternet.Example08;
+import searchOnInternet.Example09;
+import searchOnInternet.Example10;
+import searchOnInternet.Example11;
+import searchOnInternet.Example12;
 import searchOnInternet.Example13;
+import searchOnInternet.Example14;
+import searchOnInternet.Example15;
+import searchOnInternet.Example16;
+import searchOnInternet.Example17;
+import searchOnInternet.Example18;
+import searchOnInternet.Example19;
+import searchOnInternet.Example20;
 import searchOnInternet.TwoTuple;
 
 public class Demo {
@@ -55,19 +73,23 @@ public class Demo {
 	
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException, InterruptedException {
 		TestInput ti = new TestInput();
-		list1 = ti.createTestCase_multi("case13mix.txt", "String", "String");
-		Example13 e5 ;
-		e5 = new Example13();
+		list1 = ti.createTestCase_multi("case20mix.txt", "String", "String");
+		Example20 e5 ;
+		
+		e5 = new Example20();
+		
 		e5.reduce(list1.get(0));
 		tt1 = e5.getOutput();
 		System.out.println("第0个："+tt1.toString());
 		for(int i = 1;i<list1.size();i++) {
-			e5 = new Example13();
-			e5.reduce(list1.get(0));
-			tt2 = e5.getOutput();
-			System.out.println("第"+i+"个："+tt1.toString());
+			Example20 e6 ;
+			e6 = new Example20();
+			e6.reduce(list1.get(i));
+			System.out.println(list1.get(i));
+			tt2 = e6.getOutput();
+			System.out.println("第"+i+"个："+tt2.toString());
 			if(!new Demo().isEqual(tt1, tt2)) {
 				System.out.println("不可交换！");
 				break;

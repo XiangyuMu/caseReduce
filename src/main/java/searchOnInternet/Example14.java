@@ -7,8 +7,16 @@ import com.jlu.redcueExample.Element;
 import com.jlu.redcueExample.ElemwntList;
 //输入<int,int>(key,value)
 //求value为1时的数量以及reputation的值
-//若不看reputation的话为可交换，否则是不可交换
+//若不看reputation的话为可交换，否则是不可交换(确定)
 public class Example14 {
+	
+	public List<TwoTuple> getOutput() {
+		return output;
+	}
+	public void setOutput(List<TwoTuple> output) {
+		this.output = output;
+	}
+	
 	List<TwoTuple> output = new ArrayList<TwoTuple>() ;
 	String v ="";
     public void reduce(ElemwntList list)  {
@@ -20,7 +28,7 @@ public class Example14 {
 
         for (Element value : list.getList()) {
 
-            int intValue = (Integer) value.getList().get(1);
+            int intValue = Integer.parseInt((String) value.getList().get(1)) ;
             if (intValue == 1) {
                 postsNumber ++;
             }
