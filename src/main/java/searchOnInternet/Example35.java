@@ -15,6 +15,14 @@ import com.jlu.redcueExample.ElemwntList;
 //输出值为复杂计算
 //暂不清楚，大概率可交换
 public class Example35 {
+	
+	public List<TwoTuple> getOutput() {
+		return output;
+	}
+	public void setOutput(List<TwoTuple> output) {
+		this.output = output;
+	}
+	
 	public static enum Mycounter {
 		my
 	}
@@ -38,6 +46,7 @@ public class Example35 {
 		//double d = newPR - sourcePeople.getPeopleRank();	//计算新旧PR差值
 		//int j = Math.abs( (int)(d*100.0) );					//取收敛差值放大100倍后的绝对值
 		//context.getCounter(Mycounter.my).increment(j);		//放入计数器
+		System.out.println(newPR);
 		sourcePeople.setPeopleRank(newPR);					//更新PR值			
 		output.add(new TwoTuple(key, sourcePeople.toString()));	//输出格式："userid  新PR值  userlist"
     }
@@ -51,6 +60,7 @@ public class Example35 {
     	}
 
     	public People setPeopleRank(double pageRank) {
+    		System.out.println(pageRank);
     		this.peopleRank = pageRank;
     		return this;
     	}

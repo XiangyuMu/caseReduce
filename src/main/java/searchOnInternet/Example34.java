@@ -9,8 +9,16 @@ import com.jlu.redcueExample.ElemwntList;
 
 //输入<String,int>(key,value)
 //输出值为value的累加
-//可交换
+//可交换(可交换)
 public class Example34 {
+	
+	public List<TwoTuple> getOutput() {
+		return output;
+	}
+	public void setOutput(List<TwoTuple> output) {
+		this.output = output;
+	}
+	
 	List<TwoTuple> output = new ArrayList<TwoTuple>() ;
 	String v ="";
 	float gradesSum;
@@ -21,8 +29,8 @@ public class Example34 {
     	int  maxTemp = Integer.MIN_VALUE;
 		for(Element value : list.getList()) {
 			System.out.println("年："+key+", 气温："+value);
-			if ((Integer)value.getList().get(1)>maxTemp) {
-				maxTemp = (Integer) value.getList().get(1);
+			if (Integer.parseInt((String) value.getList().get(1))>maxTemp) {
+				maxTemp = Integer.parseInt((String) value.getList().get(1));
 			}
 		}
 		System.out.println("Date:"+key+", MaxTemp:"+maxTemp);

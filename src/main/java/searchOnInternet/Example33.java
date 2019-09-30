@@ -9,8 +9,16 @@ import com.jlu.redcueExample.ElemwntList;
 
 //输入<String,String>(key,value)
 //输出值value的累加String
-//不可交换
+//不可交换（确定）
 public class Example33 {
+	
+	public List<TwoTuple> getOutput() {
+		return output;
+	}
+	public void setOutput(List<TwoTuple> output) {
+		this.output = output;
+	}
+	
 	List<TwoTuple> output = new ArrayList<TwoTuple>() ;
 	String v ="";
 	float gradesSum;

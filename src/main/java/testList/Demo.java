@@ -27,6 +27,12 @@ import searchOnInternet.Example17;
 import searchOnInternet.Example18;
 import searchOnInternet.Example19;
 import searchOnInternet.Example20;
+import searchOnInternet.Example30;
+import searchOnInternet.Example31;
+import searchOnInternet.Example32;
+import searchOnInternet.Example33;
+import searchOnInternet.Example34;
+import searchOnInternet.Example35;
 import searchOnInternet.TwoTuple;
 
 public class Demo {
@@ -75,17 +81,17 @@ public class Demo {
 	
 	public static void main(String[] args) throws IOException, InterruptedException {
 		TestInput ti = new TestInput();
-		list1 = ti.createTestCase_multi("case20mix.txt", "String", "String");
-		Example20 e5 ;
+		list1 = ti.createTestCase_multi("case35mix.txt", "String", "String");
+		Example35 e5 ;
 		
-		e5 = new Example20();
+		e5 = new Example35();
 		
 		e5.reduce(list1.get(0));
 		tt1 = e5.getOutput();
 		System.out.println("µÚ0¸ö£º"+tt1.toString());
 		for(int i = 1;i<list1.size();i++) {
-			Example20 e6 ;
-			e6 = new Example20();
+			Example35 e6 ;
+			e6 = new Example35();
 			e6.reduce(list1.get(i));
 			System.out.println(list1.get(i));
 			tt2 = e6.getOutput();
