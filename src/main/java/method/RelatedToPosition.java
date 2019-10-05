@@ -13,8 +13,10 @@ import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ForEachStmt;
 import com.github.javaparser.ast.stmt.ForStmt;
 import com.github.javaparser.ast.stmt.Statement;
+import com.github.javaparser.ast.stmt.WhileStmt;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
 
@@ -49,16 +51,50 @@ public class RelatedToPosition {
 		BlockStmt bs = reduceMd.getBody().get();
 		List<Statement> ls = bs.getStatements();
 		List<ForStmt> fl = new ArrayList<ForStmt>();
-
+		List<ForEachStmt> fel = new ArrayList<ForEachStmt>();
+		List<WhileStmt> wl = new ArrayList<WhileStmt>();
 		List<Parameter>  lp = reduceMd.getParameters();
 		Expression par ;
 		for(int k = 0;k<lp.size();k++) {      //找到第一个循环的形式为list的变量名称
 			if(lp.get(k).getTypeAsString().indexOf("ElemwntList")!=-1) {
 				//par = lp.get(k).getNameAsString();
 				par = lp.get(k).getNameAsExpression();
+				System.out.println(par);
+			}else {
+				System.out.println("错误！reduce函数没有输入！");
+			}
+		}
+		
+		System.out.println(ls);
+		
+		for(int i = 0;i<ls.size();i++) {           //找到reduce函数中的while、for和foreach循环，放入wl、fl和fel中。
+			if(ls.get(i).isForStmt()) {
+				fl.add(ls.get(i).asForStmt());
+			}else if(ls.get(i).isForEachStmt()) {
+				fel.add(ls.get(i).asForEachStmt());
+			}else if(ls.get(i).isWhileStmt()) {
+				wl.add(ls.get(i).asWhileStmt());
+			}
+		}
+		
+		if(fl.size()!=0) {
+			for(int flNum = 0;flNum<fl.size();flNum++) {
+				
+			}
+		}
+		if(fel.size()!=0) {
+			for(int felNum = 0;felNum<fl.size();felNum++) {
+				
+			}
+		}
+		if(wl.size()!=0) {
+			for(int wlNum = 0;wlNum<fl.size();wlNum++) {
+				
 			}
 		}
 //		System.out.println(reduceMd);
 		return co;
 	}
+	
+	
 }
