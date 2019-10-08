@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
@@ -46,7 +47,7 @@ public class ExampleTest {
 		List<Statement> ls = bs.getStatements();
 		ForStmt fs;
 		List<Parameter>  lp = md.getParameters();
-		Expression par ;
+		Expression par = null ;
 		for(int k = 0;k<lp.size();k++) {      //找到第一个循环的形式为list的变量名称
 			if(lp.get(k).getTypeAsString().indexOf("List")!=-1) {
 				//par = lp.get(k).getNameAsString();
@@ -63,9 +64,12 @@ public class ExampleTest {
 					}	
 				}
 				
+				NodeList<Expression> nle = new NodeList<Expression>();
+				nle.add(new NameExpr("list"));
+				
 				NameExpr clazz = new NameExpr("System");
 		        FieldAccessExpr field = new FieldAccessExpr(clazz, "out");
-		        MethodCallExpr call = new MethodCallExpr(field, "println");
+		        MethodCallExpr call = new MethodCallExpr(field, "println",nle);
 		        
 				System.out.println(fs.getBody().asBlockStmt().addStatement(call));  //添加到合适的位置
 				System.out.println(fs);

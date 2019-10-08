@@ -15,10 +15,13 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ForEachStmt;
 import com.github.javaparser.ast.stmt.ForStmt;
+import com.github.javaparser.ast.stmt.IfStmt;
 import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.WhileStmt;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
+
+import AnalysisProgress.functionInfo;
 
 public class RelatedToPosition {
 	
@@ -79,16 +82,28 @@ public class RelatedToPosition {
 		
 		if(fl.size()!=0) {
 			for(int flNum = 0;flNum<fl.size();flNum++) {
+				List<Statement> lstmt;
+				System.out.println("for");
+				lstmt = fl.get(flNum).getBody().asBlockStmt().getStatements();
+				extractInfo(lstmt);
 				
 			}
 		}
 		if(fel.size()!=0) {
-			for(int felNum = 0;felNum<fl.size();felNum++) {
-				
+			for(int felNum = 0;felNum<fel.size();felNum++) {
+				List<Statement> lstmt;
+				System.out.println("foreach");
+				//System.out.println(fel.get(felNum).getBody().asBlockStmt().getStatements());
+				lstmt = fel.get(felNum).getBody().asBlockStmt().getStatements();
+				extractInfo(lstmt);
 			}
 		}
 		if(wl.size()!=0) {
-			for(int wlNum = 0;wlNum<fl.size();wlNum++) {
+			for(int wlNum = 0;wlNum<wl.size();wlNum++) {
+
+				System.out.println("while");
+				System.out.println(wl.get(wlNum).getBody());
+			
 				
 			}
 		}
@@ -96,5 +111,23 @@ public class RelatedToPosition {
 		return co;
 	}
 	
+	
+	private static List<functionInfo> extractInfo(List<Statement> ls) {
+		List<functionInfo> lf = new ArrayList<functionInfo>();
+		IfStmt is;
+		for(int i = 0;i<ls.size();i++) {
+			if(ls.get(i).isIfStmt()) {
+				is = ls.get(i).asIfStmt();
+				Expression ifcondition ;
+				ifcondition = is.getCondition();
+				if(ifcondition.toString().indexOf("list")!=-1) {
+					functionInfo fi = new functionInfo();
+					fi.setIsRelationToValue(true);
+					fi.getValueList().add("list");
+				}
+			}
+		}
+		return lf;
+	}
 	
 }
