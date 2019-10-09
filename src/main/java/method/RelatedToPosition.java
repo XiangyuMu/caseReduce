@@ -11,7 +11,10 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
+import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ForEachStmt;
 import com.github.javaparser.ast.stmt.ForStmt;
@@ -20,6 +23,8 @@ import com.github.javaparser.ast.stmt.Statement;
 import com.github.javaparser.ast.stmt.WhileStmt;
 import com.github.javaparser.ast.visitor.ModifierVisitor;
 import com.github.javaparser.ast.visitor.Visitable;
+import com.github.javaparser.ast.visitor.VoidVisitor;
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import AnalysisProgress.functionInfo;
 
@@ -33,9 +38,48 @@ public class RelatedToPosition {
 		Scanner scan = new Scanner(System.in);
 		Filename = scan.next();
 		CompilationUnit cu = StaticJavaParser.parse(new File(FILE_PATH+Filename+".java"));
+		
+		List<String> ListValue = new ArrayList<String>();
+		List<String> ListValue_1 = new ArrayList<String>();
+		VoidVisitor<List<String>> md = new InputList();
+		md.visit(cu, ListValue);
+		VoidVisitor<List<String>> md_1 = new InputList_1();
+		md_1.visit(cu, ListValue_1);
+		System.out.println(ListValue);
+		
 		ModifierVisitor<?> checkProgramVisitor = new checkProgram();
 		checkProgramVisitor.visit(cu, null);
 		
+	}
+	
+	
+	private static class InputList extends VoidVisitorAdapter<List<String>>{
+		@Override
+		public void visit(AssignExpr ae,List<String> collector) {
+			super.visit(ae, collector);
+			collector.add(ae.getValue().toString());
+		}
+	}
+	
+	private static class InputList_1 extends VoidVisitorAdapter<List<String>>{
+		@Override
+		public void visit(VariableDeclarator ae,List<String> collector) {
+			List<String> list_1 = new ArrayList<String>();
+			super.visit(ae, list_1);
+			list_1.add(ae.toString());
+			for(int i = 0;i<list_1.size();i++) {
+				if(list_1.get(i).indexOf("=")!=-1) {
+					String[] list = list_1.get(i).split("=");
+					if(list.length==2) {
+						for(String l:collector) {
+							if(list[1].contains(l)) {
+								collector.add(list[0]);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	private static class checkProgram extends ModifierVisitor<Void>{
