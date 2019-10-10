@@ -8,12 +8,14 @@ import java.util.Scanner;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.body.VariableDeclarator;
 import com.github.javaparser.ast.expr.AssignExpr;
 import com.github.javaparser.ast.expr.Expression;
+import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
 import com.github.javaparser.ast.stmt.ForEachStmt;
@@ -40,39 +42,68 @@ public class RelatedToPosition {
 		CompilationUnit cu = StaticJavaParser.parse(new File(FILE_PATH+Filename+".java"));
 		
 		List<String> ListValue = new ArrayList<String>();
-		List<String> ListValue_1 = new ArrayList<String>();
 		VoidVisitor<List<String>> md = new InputList();
+		ListValue.add("list");
 		md.visit(cu, ListValue);
 		VoidVisitor<List<String>> md_1 = new InputList_1();
-		md_1.visit(cu, ListValue_1);
+		md_1.visit(cu, ListValue);
+		VoidVisitor<List<String>> md_2 = new InputList_2();
+		md_2.visit(cu, ListValue);
+		VoidVisitor<List<String>> md_3 = new InputList_3();
+		md_3.visit(cu, ListValue);
+		boolean flag = false;
+		int num_1 ,num_2;
+		while(!flag) {
+			num_1 = ListValue.size();
+			md.visit(cu, ListValue);
+			md_1.visit(cu, ListValue);
+			md_2.visit(cu, ListValue);
+			md_3.visit(cu, ListValue);
+			num_2 = ListValue.size();
+			if(num_1==num_2) {
+				flag=true;
+			}
+		}
+		
 		System.out.println(ListValue);
 		
-		ModifierVisitor<?> checkProgramVisitor = new checkProgram();
-		checkProgramVisitor.visit(cu, null);
+		ModifierVisitor<List<String>> checkProgramVisitor = new checkProgram();
+		checkProgramVisitor.visit(cu, ListValue);
 		
 	}
 	
 	
-	private static class InputList extends VoidVisitorAdapter<List<String>>{
+	private static class InputList extends VoidVisitorAdapter<List<String>>{       //以等号判断list相关
 		@Override
-		public void visit(AssignExpr ae,List<String> collector) {
+		public void visit(AssignExpr ae,List<String> collector) {       
+			List<String> list_key = new ArrayList<String>();
+			List<String> list_value = new ArrayList<String>();
 			super.visit(ae, collector);
-			collector.add(ae.getValue().toString());
+			list_key.add(ae.getValue().toString());
+			list_value.add(ae.getTarget().toString());
+			for(int i=0;i<list_key.size();i++) {
+				for(int j=0;j<collector.size();j++) {
+					if(list_value.get(i).contains(collector.get(j))&&!collector.contains(list_key.get(i))) {
+						collector.add(list_key.get(i));
+					}
+				}
+			}
 		}
 	}
 	
-	private static class InputList_1 extends VoidVisitorAdapter<List<String>>{
+	private static class InputList_1 extends VoidVisitorAdapter<List<String>>{        //也是以等号判断list相关，但判断的是变量声明时的
 		@Override
-		public void visit(VariableDeclarator ae,List<String> collector) {
+		public void visit(VariableDeclarator vd,List<String> collector) {
 			List<String> list_1 = new ArrayList<String>();
-			super.visit(ae, list_1);
-			list_1.add(ae.toString());
+			super.visit(vd, list_1);
+			System.out.println("ae:"+vd.toString());
+			list_1.add(vd.toString());
 			for(int i = 0;i<list_1.size();i++) {
 				if(list_1.get(i).indexOf("=")!=-1) {
 					String[] list = list_1.get(i).split("=");
 					if(list.length==2) {
-						for(String l:collector) {
-							if(list[1].contains(l)) {
+						for(int j = 0;j<collector.size();j++) {
+							if(list[1].contains(collector.get(j))&&!collector.contains(list[0])) {
 								collector.add(list[0]);
 							}
 						}
@@ -82,17 +113,49 @@ public class RelatedToPosition {
 		}
 	}
 	
-	private static class checkProgram extends ModifierVisitor<Void>{
+	private static class InputList_2 extends VoidVisitorAdapter<List<String>>{      //在foreach中判断list相关
 		@Override
-		public ClassOrInterfaceDeclaration visit(ClassOrInterfaceDeclaration co, Void arg) {
+		public void visit(ForEachStmt fes, List<String> collector) {
 			// TODO Auto-generated method stub
-			super.visit(co, arg);
-			checkType(co);
+			List<String> list_key = new ArrayList<String>();
+			List<String> list_value = new ArrayList<String>();
+			super.visit(fes, collector);
+			list_key.add(fes.getVariable().getVariables().get(0).toString());
+			list_value.add(fes.getIterable().toString());
+			for(int i = 0;i<list_key.size();i++) {
+				for(int j=0;j<collector.size();j++) {
+					if(list_value.get(i).contains(collector.get(j))&&!collector.contains(list_key.get(i))) {
+						collector.add(list_key.get(i));
+					}
+				}
+			}
+			
+			System.out.println("fes.getV"+fes.getIterable());
+		}
+	}
+	
+	private static class InputList_3 extends VoidVisitorAdapter<List<String>>{
+		@Override
+		public void visit(MethodCallExpr mce, List<String> collector) {
+			// TODO Auto-generated method stub
+			
+			super.visit(mce,collector);
+			System.out.println("methodname:"+mce+" methodarg:"+mce.getArguments());   //此处有问题，需要改！
+		}
+	}
+	
+	private static class checkProgram extends ModifierVisitor<List<String>>{
+		@Override
+		public ClassOrInterfaceDeclaration visit(ClassOrInterfaceDeclaration co, List<String> collector) {
+			// TODO Auto-generated method stub
+			super.visit(co, collector);
+			System.out.println("collector:"+collector);
+			checkType(co,collector);
 			return co;
 		}
 	}
 	
-	private static ClassOrInterfaceDeclaration checkType(ClassOrInterfaceDeclaration co) {
+	private static ClassOrInterfaceDeclaration checkType(ClassOrInterfaceDeclaration co,List<String> collector) {
 		MethodDeclaration reduceMd  = new MethodDeclaration();
 		reduceMd = co.getMethodsByName("reduce").get(0);
 		BlockStmt bs = reduceMd.getBody().get();
@@ -129,7 +192,7 @@ public class RelatedToPosition {
 				List<Statement> lstmt;
 				System.out.println("for");
 				lstmt = fl.get(flNum).getBody().asBlockStmt().getStatements();
-				extractInfo(lstmt);
+				extractInfo(lstmt,collector);
 				
 			}
 		}
@@ -139,7 +202,7 @@ public class RelatedToPosition {
 				System.out.println("foreach");
 				//System.out.println(fel.get(felNum).getBody().asBlockStmt().getStatements());
 				lstmt = fel.get(felNum).getBody().asBlockStmt().getStatements();
-				extractInfo(lstmt);
+				extractInfo(lstmt,collector);
 			}
 		}
 		if(wl.size()!=0) {
@@ -156,7 +219,7 @@ public class RelatedToPosition {
 	}
 	
 	
-	private static List<functionInfo> extractInfo(List<Statement> ls) {
+	private static List<functionInfo> extractInfo(List<Statement> ls,List<String> collector) {
 		List<functionInfo> lf = new ArrayList<functionInfo>();
 		IfStmt is;
 		for(int i = 0;i<ls.size();i++) {
@@ -164,6 +227,17 @@ public class RelatedToPosition {
 				is = ls.get(i).asIfStmt();
 				Expression ifcondition ;
 				ifcondition = is.getCondition();
+				for(int k = 0;k<collector.size();k++) {    //确定判断条件中是否包含测试用例相关值，即确定是否与值有关
+					if(ifcondition.toString().indexOf(collector.get(k))!=-1) {
+						functionInfo fi = new functionInfo();
+						fi.setIsRelationToValue(true);
+						fi.getValueList().add(collector.get(k));
+						lf.add(fi);
+					}
+				}
+				
+				
+				
 				if(ifcondition.toString().indexOf("list")!=-1) {
 					functionInfo fi = new functionInfo();
 					fi.setIsRelationToValue(true);

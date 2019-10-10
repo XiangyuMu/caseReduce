@@ -34,7 +34,21 @@ public class functionInfo {
 		this.valueList = valueList;
 	}
 	
-	
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		String str = "";
+		if(isRelationToPosition&&!isRelationToValue) {
+			str = "与位置有关，与值无关!   且此时值为: "+positionList.toString();
+		}else if(!isRelationToPosition&&isRelationToValue) {
+			str = "与位置无关，与值有关!   且此时值为: "+valueList.toString();
+		}else if(isRelationToPosition&&isRelationToValue) {
+			str = "与值和位置都有关！且此时位置为："+positionList.toString()+" 值为: "+valueList.toString();
+		}else {
+			str = "与位置和值都无关！";
+		}
+		return str;
+	}
 	
 
 }
