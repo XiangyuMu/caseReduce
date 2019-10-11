@@ -38,6 +38,9 @@ public class Example07 {
         for (Element value : list.getList()) {
             String valueStr = value.getList().get(1).toString();
             String[] kv = valueStr.split(":");
+            if(pr==0.2) {
+            	
+            }
             if (valueStr.startsWith("pr")) {
                 prMap.put(Integer.parseInt(kv[1]), Float.valueOf(kv[2]));
             } else {

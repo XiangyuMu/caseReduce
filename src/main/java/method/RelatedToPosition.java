@@ -96,7 +96,7 @@ public class RelatedToPosition {
 		public void visit(VariableDeclarator vd,List<String> collector) {
 			List<String> list_1 = new ArrayList<String>();
 			super.visit(vd, list_1);
-			System.out.println("ae:"+vd.toString());
+//			System.out.println("ae:"+vd.toString());
 			list_1.add(vd.toString());
 			for(int i = 0;i<list_1.size();i++) {
 				if(list_1.get(i).indexOf("=")!=-1) {
@@ -130,7 +130,7 @@ public class RelatedToPosition {
 				}
 			}
 			
-			System.out.println("fes.getV"+fes.getIterable());
+//			System.out.println("fes.getV"+fes.getIterable());
 		}
 	}
 	
@@ -138,9 +138,24 @@ public class RelatedToPosition {
 		@Override
 		public void visit(MethodCallExpr mce, List<String> collector) {
 			// TODO Auto-generated method stub
-			
+			List<String> list_key = new ArrayList<String>();
+			List<String> list_value = new ArrayList<String>();
 			super.visit(mce,collector);
-			System.out.println("methodname:"+mce+" methodarg:"+mce.getArguments());   //此处有问题，需要改！
+//			System.out.println("methodname:"+mce+" methodarg:"+mce.getArguments());   //此处有问题，需要改！
+			list_key.add(mce.toString());
+			list_value.add(mce.getArguments().toString());
+			for(int i = 0;i<list_key.size();i++) {
+				for(int j=0;j<collector.size();j++) {
+					if(list_value.get(i).contains(collector.get(j))&&!collector.contains(list_key.get(i).split("\\.")[0])) {
+						int num = list_key.get(i).indexOf(list_value.get(i));
+//						System.out.println("list_key: "+list_key.get(i));
+						String[] key = list_key.get(i).split("\\.");
+//						System.out.println("key: "+key.length);
+						collector.add(key[0]);
+					}
+				}
+			}
+			
 		}
 	}
 	
@@ -150,12 +165,15 @@ public class RelatedToPosition {
 			// TODO Auto-generated method stub
 			super.visit(co, collector);
 			System.out.println("collector:"+collector);
-			checkType(co,collector);
+			List<functionInfo> lf = new ArrayList<functionInfo>();
+			List<List <functionInfo>> llf = new ArrayList<List<functionInfo>>();
+			checkType(co,collector,llf);
+			
 			return co;
 		}
 	}
 	
-	private static ClassOrInterfaceDeclaration checkType(ClassOrInterfaceDeclaration co,List<String> collector) {
+	private static ClassOrInterfaceDeclaration checkType(ClassOrInterfaceDeclaration co,List<String> collector,List<List <functionInfo>> llf ) {
 		MethodDeclaration reduceMd  = new MethodDeclaration();
 		reduceMd = co.getMethodsByName("reduce").get(0);
 		BlockStmt bs = reduceMd.getBody().get();
@@ -169,13 +187,13 @@ public class RelatedToPosition {
 			if(lp.get(k).getTypeAsString().indexOf("ElemwntList")!=-1) {
 				//par = lp.get(k).getNameAsString();
 				par = lp.get(k).getNameAsExpression();
-				System.out.println(par);
+//				System.out.println(par);
 			}else {
 				System.out.println("错误！reduce函数没有输入！");
 			}
 		}
 		
-		System.out.println(ls);
+		//System.out.println(ls);
 		
 		for(int i = 0;i<ls.size();i++) {           //找到reduce函数中的while、for和foreach循环，放入wl、fl和fel中。
 			if(ls.get(i).isForStmt()) {
@@ -186,13 +204,16 @@ public class RelatedToPosition {
 				wl.add(ls.get(i).asWhileStmt());
 			}
 		}
-		
+		List<functionInfo> lf;
 		if(fl.size()!=0) {
 			for(int flNum = 0;flNum<fl.size();flNum++) {
 				List<Statement> lstmt;
 				System.out.println("for");
 				lstmt = fl.get(flNum).getBody().asBlockStmt().getStatements();
-				extractInfo(lstmt,collector);
+				lf = extractInfo(lstmt,collector);
+				if(lf.size()!=0) {
+					llf.add(lf);
+				}
 				
 			}
 		}
@@ -202,19 +223,27 @@ public class RelatedToPosition {
 				System.out.println("foreach");
 				//System.out.println(fel.get(felNum).getBody().asBlockStmt().getStatements());
 				lstmt = fel.get(felNum).getBody().asBlockStmt().getStatements();
-				extractInfo(lstmt,collector);
+				lf = extractInfo(lstmt,collector);
+				if(lf.size()!=0) {
+					llf.add(lf);
+				}
 			}
 		}
 		if(wl.size()!=0) {
 			for(int wlNum = 0;wlNum<wl.size();wlNum++) {
-
+				List<Statement> lstmt;
 				System.out.println("while");
-				System.out.println(wl.get(wlNum).getBody());
+				lstmt = wl.get(wlNum).getBody().asBlockStmt().getStatements();
+				lf = extractInfo(lstmt,collector);
+				if(lf.size()!=0) {
+					llf.add(lf);
+				}
 			
 				
 			}
 		}
 //		System.out.println(reduceMd);
+		System.out.println("llf: "+llf);
 		return co;
 	}
 	
@@ -227,24 +256,37 @@ public class RelatedToPosition {
 				is = ls.get(i).asIfStmt();
 				Expression ifcondition ;
 				ifcondition = is.getCondition();
-				for(int k = 0;k<collector.size();k++) {    //确定判断条件中是否包含测试用例相关值，即确定是否与值有关
+				boolean isrelatedtoValue = false;
+				for(int k = 0;k<collector.size();k++) {    //确定判断条件中是否包含测试用例相关值,即确定是否与值有关
 					if(ifcondition.toString().indexOf(collector.get(k))!=-1) {
+						//System.out.println("运行到此！");
+						//System.out.println("ifcondition: "+ifcondition);
 						functionInfo fi = new functionInfo();
 						fi.setIsRelationToValue(true);
 						fi.getValueList().add(collector.get(k));
 						lf.add(fi);
+						isrelatedtoValue = true;
+						//System.out.println(fi);
 					}
 				}
-				
-				
-				
-				if(ifcondition.toString().indexOf("list")!=-1) {
+				if(!isrelatedtoValue) {
+					System.out.println("与值无关");
 					functionInfo fi = new functionInfo();
-					fi.setIsRelationToValue(true);
-					fi.getValueList().add("list");
+					fi.setIsRelationToPosition(true);
+					fi.getPositionList().add("position_num");
+					lf.add(fi);
 				}
+				System.out.println("第一个lf:"+lf.toString());
+//				
+//				if(ifcondition.toString().indexOf("list")!=-1) {
+//					functionInfo fi = new functionInfo();
+//					fi.setIsRelationToValue(true);
+//					fi.getValueList().add("list");
+//				}
 			}
+			System.out.println("第二个lf:"+lf.toString());
 		}
+		System.out.println("第三个lf:"+lf.toString());
 		return lf;
 	}
 	

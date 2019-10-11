@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class functionInfo {
-	private Boolean isRelationToPosition;
-	private Boolean isRelationToValue;
+	private Boolean isRelationToPosition = false;
+	private Boolean isRelationToValue = false;
 	
-	private List<Integer> positionList = new ArrayList<Integer>();
+	private List<String> positionList = new ArrayList<String>();
 	private List<Object> valueList = new ArrayList<Object>();
 	public Boolean getIsRelationToPosition() {
 		return isRelationToPosition;
@@ -21,10 +21,10 @@ public class functionInfo {
 	public void setIsRelationToValue(Boolean isRelationToValue) {
 		this.isRelationToValue = isRelationToValue;
 	}
-	public List<Integer> getPositionList() {
+	public List<String> getPositionList() {
 		return positionList;
 	}
-	public void setPositionList(List<Integer> positionList) {
+	public void setPositionList(List<String> positionList) {
 		this.positionList = positionList;
 	}
 	public List<Object> getValueList() {
