@@ -168,7 +168,7 @@ public class RelatedToPosition {
 			List<functionInfo> lf = new ArrayList<functionInfo>();
 			List<List <functionInfo>> llf = new ArrayList<List<functionInfo>>();
 			checkType(co,collector,llf);
-			
+			writeInProgram(co,llf);
 			return co;
 		}
 	}
@@ -211,9 +211,10 @@ public class RelatedToPosition {
 				System.out.println("for");
 				lstmt = fl.get(flNum).getBody().asBlockStmt().getStatements();
 				lf = extractInfo(lstmt,collector);
-				if(lf.size()!=0) {
-					llf.add(lf);
-				}
+//				if(lf.size()!=0) {
+//					llf.add(lf);
+//				}
+				llf.add(lf);
 				
 			}
 		}
@@ -224,9 +225,10 @@ public class RelatedToPosition {
 				//System.out.println(fel.get(felNum).getBody().asBlockStmt().getStatements());
 				lstmt = fel.get(felNum).getBody().asBlockStmt().getStatements();
 				lf = extractInfo(lstmt,collector);
-				if(lf.size()!=0) {
-					llf.add(lf);
-				}
+//				if(lf.size()!=0) {
+//					llf.add(lf);
+//				}
+				llf.add(lf);
 			}
 		}
 		if(wl.size()!=0) {
@@ -235,11 +237,11 @@ public class RelatedToPosition {
 				System.out.println("while");
 				lstmt = wl.get(wlNum).getBody().asBlockStmt().getStatements();
 				lf = extractInfo(lstmt,collector);
-				if(lf.size()!=0) {
-					llf.add(lf);
-				}
+//				if(lf.size()!=0) {
+//					llf.add(lf);
+//				}
 			
-				
+				llf.add(lf);
 			}
 		}
 //		System.out.println(reduceMd);
@@ -290,4 +292,33 @@ public class RelatedToPosition {
 		return lf;
 	}
 	
+	private static ClassOrInterfaceDeclaration writeInProgram(ClassOrInterfaceDeclaration co,List<List <functionInfo>> llf) {
+		MethodDeclaration reduceMd  = new MethodDeclaration();
+		reduceMd = co.getMethodsByName("reduce").get(0);
+		BlockStmt bs = reduceMd.getBody().get();
+		List<Statement> ls = bs.getStatements();
+		List<ForStmt> fl = new ArrayList<ForStmt>();
+		List<ForEachStmt> fel = new ArrayList<ForEachStmt>();
+		List<WhileStmt> wl = new ArrayList<WhileStmt>();
+		List<Parameter>  lp = reduceMd.getParameters();
+		for(int i = 0;i<llf.size();i++) {
+			List<functionInfo> lf = llf.get(i);
+			for(int k = 0;k<lf.size();k++) {
+				if(lf.get(k).getIsRelationToPosition()==true) {
+					
+				}else {
+					
+				}
+			}
+		}
+		
+		
+		return co;
+		
+	}
+	
+	
+	private void addInfoRelatedToPosition(functionInfo f) {
+		
+	}
 }
