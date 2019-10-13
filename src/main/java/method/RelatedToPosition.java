@@ -3,11 +3,14 @@ package method;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.AnnotationDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
@@ -18,6 +21,7 @@ import com.github.javaparser.ast.expr.Expression;
 import com.github.javaparser.ast.expr.MethodCallExpr;
 import com.github.javaparser.ast.expr.VariableDeclarationExpr;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.github.javaparser.ast.stmt.ExpressionStmt;
 import com.github.javaparser.ast.stmt.ForEachStmt;
 import com.github.javaparser.ast.stmt.ForStmt;
 import com.github.javaparser.ast.stmt.IfStmt;
@@ -297,20 +301,73 @@ public class RelatedToPosition {
 		reduceMd = co.getMethodsByName("reduce").get(0);
 		BlockStmt bs = reduceMd.getBody().get();
 		List<Statement> ls = bs.getStatements();
+		
+		
+		System.out.println("类型是: "+ls.get(0));
+		ExpressionStmt es = new ExpressionStmt();
+		VariableDeclarationExpr vde = new VariableDeclarationExpr();
+		VariableDeclarator vd = new VariableDeclarator();
+		vd.setName("qwe");
+		vd.setType("int");
+		vd.setInitializer("0");
+		NodeList<VariableDeclarator> nvd = new NodeList<>();
+		nvd.add(vd);
+		vde.setVariables(nvd);
+		es.setExpression(vde);
+		bs.addStatement( es);
+		System.out.println("结果是："+bs);
+		
 		List<ForStmt> fl = new ArrayList<ForStmt>();
 		List<ForEachStmt> fel = new ArrayList<ForEachStmt>();
 		List<WhileStmt> wl = new ArrayList<WhileStmt>();
 		List<Parameter>  lp = reduceMd.getParameters();
-		for(int i = 0;i<llf.size();i++) {
-			List<functionInfo> lf = llf.get(i);
-			for(int k = 0;k<lf.size();k++) {
-				if(lf.get(k).getIsRelationToPosition()==true) {
-					
+		int i = 0;
+		int k = 0;
+		while(i<llf.size()) {
+			Statement s = null;
+			while(k<ls.size()) {				
+				if(ls.get(k).isForEachStmt()) {                   //取一个for循环
+					s = ls.get(k).asForEachStmt();
+					break;
+				}else if(ls.get(k).isForStmt()) {
+					s = ls.get(k).asForStmt();
+					break;
+				}else if(ls.get(k).isWhileStmt()) {
+					s = ls.get(k).asWhileStmt();
+					break;
 				}else {
-					
+					k++;
 				}
 			}
+			
+			List<functionInfo> lf = llf.get(i);
+			if(lf.size()!=0){		//取一个functonInfo，如为空则直接跳过。
+				for(int j = 0;j<lf.size();j++) {
+					if(lf.get(j).getIsRelationToPosition()) {
+						addInfoRelatedToPosition(lf.get(j),s);
+					}else if(lf.get(j).getIsRelationToValue()){
+					
+					}
+				}
+			}
+			i++;
+			k++;
+			
 		}
+		
+		
+		
+		
+//		for(int i = 0;i<llf.size();i++) {
+//			List<functionInfo> lf = llf.get(i);
+//			for(int k = 0;k<lf.size();k++) {
+//				if(lf.get(k).getIsRelationToPosition()==true) {
+//					
+//				}else {
+//					
+//				}
+//			}
+//		}
 		
 		
 		return co;
@@ -318,7 +375,14 @@ public class RelatedToPosition {
 	}
 	
 	
-	private void addInfoRelatedToPosition(functionInfo f) {
-		
+	private static void addInfoRelatedToPosition(functionInfo f,Statement st) {
+		if(st.isForStmt()) {
+			
+		}else if(st.isForEachStmt()) {
+			System.out.println("st: "+st.asForEachStmt().getParentNode().get());
+			Node node = st.asForEachStmt().getParentNode().get();
+		}else if(st.isWhileStmt()) {
+			
+		}
 	}
 }
