@@ -9,6 +9,16 @@ public class functionInfo {
 	
 	private List<String> positionList = new ArrayList<String>();
 	private List<Object> valueList = new ArrayList<Object>();
+	
+	private String ifCondition = "";
+	
+	
+	public String getIfCondition() {
+		return ifCondition;
+	}
+	public void setIfCondition(String ifCondition) {
+		this.ifCondition = ifCondition;
+	}
 	public Boolean getIsRelationToPosition() {
 		return isRelationToPosition;
 	}
@@ -39,9 +49,9 @@ public class functionInfo {
 		// TODO Auto-generated method stub
 		String str = "";
 		if(isRelationToPosition&&!isRelationToValue) {
-			str = "与位置有关，与值无关!   且此时值为: "+positionList.toString();
+			str = "与位置有关，与值无关!   且此时值为: "+positionList.toString()+"  判断条件为： "+ifCondition;
 		}else if(!isRelationToPosition&&isRelationToValue) {
-			str = "与位置无关，与值有关!   且此时值为: "+valueList.toString();
+			str = "与位置无关，与值有关!   且此时值为: "+valueList.toString()+"  判断条件为： "+ifCondition;
 		}else if(isRelationToPosition&&isRelationToValue) {
 			str = "与值和位置都有关！且此时位置为："+positionList.toString()+" 值为: "+valueList.toString();
 		}else {

@@ -28,6 +28,9 @@ public class Example17 {
           String valStr = list.getList().get(i).getList().get(1).toString();
           i = i+1;
           attackers.add(valStr);
+          if(i == 0) {
+        	  
+          }
         }
         output.add(new TwoTuple(key, attackers.toString()));
     }
